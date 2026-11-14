@@ -1,6 +1,6 @@
 
 // --------------------------------------
-// AGRIPRICE AI - DEMONSTRATION DATA
+// KrishiMitra - DEMONSTRATION DATA
 // --------------------------------------
 
 const markets = [
