@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriPrice AI | Smart Farming Decisions</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>🌱 KrishiMitra</h2>
+      <p class="side-subtitle">Smart Farming Decisions</p>
+      <nav>
+        <button class="nav-btn active" data-page="dashboard"> Dashboard</button>
+        <button class="nav-btn" data-page="prices"> Market Prices</button>
+        <button class="nav-btn" data-page="prediction"> Price Prediction</button>
+        <button class="nav-btn" data-page="mandi"> Best Mandi AI</button>
+        <button class="nav-btn" data-page="quality"> Crop Quality</button>
+        <button class="nav-btn" data-page="advisor"> Sell or Wait</button>
+        <button class="nav-btn" data-page="voice"> Kannada Assistant</button>
+        <button class="nav-btn" data-page="profit"> Profit Calculator</button>
+        <button class="nav-btn" data-page="alerts"> Price Alerts</button>
+      </nav>
+      <p class="side-note">Prototype • Sample data</p>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="page-title">Dashboard</h1>
+          <p>Karnataka agricultural market decision support</p>
+        </div>
+        <span class="status">● Demo mode</span>
+      </header>
+
+      <section class="page active" id="dashboard">
+        <div class="welcome">
+          <div>
+            <h2>Welcome to KrishiMitra 🌾</h2>
+            <p>Make smarter crop-selling decisions with market insights.</p>
+          </div>
+          <div class="selectors">
+            <select id="state">
+              <option>Karnataka</option>
+            </select>
+            <select id="district">
+              <option>Dakshina Kannada</option>
+              <option>Udupi</option>
+              <option>Mysuru</option>
+              <option>Shivamogga</option>
+            </select>
+            <select id="crop">
+              <option>Tomato</option>
+              <option>Onion</option>
+              <option>Potato</option>
+              <option>Beans</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid cards">
+          <article class="card">
+            <p>Sample current price</p>
+            <h2 id="current-price">₹2,000</h2>
+            <small>Per quintal</small>
+          </article>
+          <article class="card">
+            <p>Sample predicted price</p>
+            <h2 id="predicted-price">₹2,150</h2>
+            <small>Seven-day estimate</small>
+          </article>
+          <article class="card">
+            <p>Markets compared</p>
+            <h2>3</h2>
+            <small>Demonstration markets</small>
+          </article>
+          <article class="card">
+            <p>Decision support</p>
+            <h2>5</h2>
+            <small>Smart farmer features</small>
+          </article>
+        </div>
+
+        <div class="grid two">
+          <article class="panel">
+            <h3>Seven-day price trend</h3>
+            <canvas id="priceChart"></canvas>
+          </article>
+          <article class="panel">
+            <h3>KrishiMitra highlights</h3>
+            <div id="dashboard-insights" class="insight-list"></div>
+            <button class="primary" onclick="showPage('mandi')">Find Best Mandi</button>
+          </article>
+        </div>
+
+        <article class="panel">
+          <h3>Quick access to innovations</h3>
+          <div class="grid three">
+            <button class="feature-tile" onclick="showPage('mandi')">📍<b>Best Mandi AI</b><small>Find highest net return</small></button>
+            <button class="feature-tile" onclick="showPage('quality')">🍅<b>Quality Estimator</b><small>Estimate grade-based price</small></button>
+            <button class="feature-tile" onclick="showPage('advisor')">🧠<b>Sell or Wait</b><small>Check spoilage and price trend</small></button>
+          </div>
+        </article>
+      </section>
+
+      <section class="page" id="prices">
+        <article class="panel">
+          <h2>Market Prices</h2>
+          <p>Illustrative prices for tomato in selected demonstration markets.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Market</th><th>Price / quintal</th><th>Transport cost</th><th>Other costs</th></tr></thead>
+              <tbody id="market-table"></tbody>
+            </table>
+          </div>
+          <p class="notice">These are fictional sample values for the prototype, not today's verified mandi prices.</p>
+        </article>
+      </section>
+
+      <section class="page" id="prediction">
+        <article class="panel">
+          <h2>Price Prediction</h2>
+          <p>Illustrative seven-day price forecast. Not generated by a trained ML model.</p>
+          <canvas id="forecastChart"></canvas>
+          <div id="forecast-message" class="result"></div>
+        </article>
+      </section>
+
+      <section class="page" id="mandi">
+        <article class="panel">
+          <h2> AI-Based Best Mandi Recommendation</h2>
+          <p>Find the market that may give you the highest net return after estimated expenses.</p>
+          <div class="form-grid">
+            <label>Quantity (quintals)
+              <input id="mandi-quantity" type="number" min="1" value="10">
+            </label>
+            <label>Your location / village
+              <input id="farmer-location" type="text" placeholder="Enter your village">
+            </label>
+          </div>
+          <button class="primary" onclick="recommendMandi()">Find Best Mandi</button>
+          <div id="mandi-result" class="result">Enter your quantity and calculate the best option.</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Market</th><th>Gross revenue</th><th>Total costs</th><th>Estimated net return</th></tr></thead>
+              <tbody id="mandi-table"></tbody>
+            </table>
+          </div>
+          <p class="notice">This prototype uses fixed sample transport costs. It does not calculate actual road distance or live travel costs.</p>
+        </article>
+      </section>
+
+      <section class="page" id="quality">
+        <article class="panel">
+          <h2> Crop Quality-Based Price Estimation</h2>
+          <p>Estimate a possible selling price based on the selected crop grade.</p>
+          <div class="form-grid">
+            <label>Crop
+              <select id="quality-crop">
+                <option>Tomato</option><option>Onion</option><option>Potato</option><option>Beans</option>
+              </select>
+            </label>
+            <label>Crop quality
+              <select id="crop-grade">
+                <option value="1.15">Grade A – Premium quality</option>
+                <option value="1">Grade B – Medium quality</option>
+                <option value="0.80">Grade C – Lower quality</option>
+              </select>
+            </label>
+            <label>Base market price (₹/quintal)
+              <input id="quality-base" type="number" min="1" value="2000">
+            </label>
+          </div>
+          <button class="primary" onclick="estimateQuality()">Estimate Price</button>
+          <div id="quality-result" class="result">Select the grade to estimate the price.</div>
+          <p class="notice">Grade multipliers are illustrative assumptions. Actual quality-based prices depend on the market and grading standards.</p>
+        </article>
+      </section>
+
+      <section class="page" id="advisor">
+        <article class="panel">
+          <h2> Smart Sell-or-Wait Alert</h2>
+          <p>Check the sample price trend and your crop's storage condition before deciding.</p>
+          <div class="form-grid">
+            <label>Current price (₹/quintal)
+              <input id="sell-current" type="number" value="2000" min="1">
+            </label>
+            <label>Expected price after 7 days (₹/quintal)
+              <input id="sell-future" type="number" value="2150" min="1">
+            </label>
+            <label>Crop condition
+              <select id="sell-condition">
+                <option value="good">Fresh / Good</option>
+                <option value="average">Average</option>
+                <option value="poor">Deteriorating</option>
+              </select>
+            </label>
+            <label>Estimated storage life remaining
+              <select id="shelf-life">
+                <option value="1">1 day</option>
+                <option value="3">3 days</option>
+                <option value="5">5 days</option>
+                <option value="7">7 days</option>
+                <option value="10">10 days or more</option>
+              </select>
+            </label>
+          </div>
+          <button class="primary" onclick="sellWaitAdvice()">Get Sell-or-Wait Advice</button>
+          <div id="sell-result" class="result">Enter the information to receive a demonstration recommendation.</div>
+        </article>
+
+        <article class="panel">
+          <h2> Perishable Crop Selling Advisor</h2>
+          <p>Estimate how urgently a perishable crop should be sold.</p>
+          <div class="form-grid">
+            <label>Crop
+              <select id="perishable-crop">
+                <option>Tomato</option><option>Beans</option><option>Potato</option><option>Onion</option>
+              </select>
+            </label>
+            <label>Harvested how many days ago?
+              <input id="harvest-days" type="number" min="0" value="1">
+            </label>
+            <label>Storage condition
+              <select id="storage-condition">
+                <option value="normal">Normal room storage</option>
+                <option value="cool">Cool storage</option>
+                <option value="poor">Poor / hot storage</option>
+              </select>
+            </label>
+            <label>Crop condition
+              <select id="perishable-condition">
+                <option value="fresh">Fresh</option>
+                <option value="average">Average</option>
+                <option value="spoiling">Starting to spoil</option>
+              </select>
+            </label>
+          </div>
+          <button class="primary" onclick="perishableAdvice()">Check Selling Urgency</button>
+          <div id="perishable-result" class="result">Provide the crop details to get advice.</div>
+          <p class="notice">This is a simple rule-based demonstration, not a scientifically validated shelf-life model.</p>
+        </article>
+      </section>
+
+      <section class="page" id="voice">
+        <article class="panel">
+          <h2>🎙️ Kannada Voice-Based Farmer Assistant</h2>
+          <p>Ask a question in Kannada using your microphone. The browser will recognize your speech and read a response aloud where supported.</p>
+          <div class="voice-box">
+            <div class="voice-icon">🎤</div>
+            <button class="primary" id="voice-start" onclick="startVoice()">Start Speaking in Kannada</button>
+            <button class="secondary" onclick="stopVoice()">Stop</button>
+            <p id="voice-status">Microphone is not active.</p>
+          </div>
+          <label>Your recognized question
+            <textarea id="voice-question" rows="3" placeholder="ನಿಮ್ಮ ಪ್ರಶ್ನೆ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ..."></textarea>
+          </label>
+          <button class="primary" onclick="answerVoiceQuestion()">Get Answer</button>
+          <div id="voice-answer" class="result">ನಮಸ್ಕಾರ! ಕೃಷಿ ಬೆಲೆಗಳ ಬಗ್ಗೆ ಪ್ರಶ್ನೆ ಕೇಳಿ.</div>
+          <button class="secondary" onclick="speakAnswer()">🔊 Read Answer Aloud</button>
+          <p class="notice">Voice recognition depends on browser and internet support. This prototype uses simple keyword matching, not a full conversational AI model.</p>
+        </article>
+      </section>
+
+      <section class="page" id="profit">
+        <article class="panel">
+          <h2>Profit Calculator</h2>
+          <div class="form-grid">
+            <label>Quantity (quintals)<input type="number" id="profit-quantity" value="10" min="0"></label>
+            <label>Price per quintal (₹)<input type="number" id="profit-price" value="2000" min="0"></label>
+            <label>Transport expenses (₹)<input type="number" id="profit-transport" value="500" min="0"></label>
+            <label>Other expenses (₹)<input type="number" id="profit-other" value="200" min="0"></label>
+          </div>
+          <button class="primary" onclick="calculateProfit()">Calculate Profit</button>
+          <div id="profit-result" class="result"></div>
+        </article>
+      </section>
+
+      <section class="page" id="alerts">
+        <article class="panel">
+          <h2>🔔 Price Alerts</h2>
+          <p>Set a target price to track in this browser session.</p>
+          <div class="form-grid">
+            <label>Target price (₹/quintal)<input type="number" id="alert-price" value="2500" min="1"></label>
+            <label>Alert type
+              <select id="alert-type"><option value="above">Price reaches or exceeds</option><option value="below">Price falls to or below</option></select>
+            </label>
+          </div>
+          <button class="primary" onclick="addAlert()">Add Alert</button>
+          <div id="alert-list" class="insight-list"></div>
+          <p class="notice">Alerts are stored only while this page is open. No SMS or push notifications are sent.</p>
+        </article>
+      </section>
+
+      <footer>AgriPrice AI • Student Prototype • Demonstration data only</footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
